@@ -4,13 +4,13 @@
 I wanted to try out react paper so I decided to create this recipe app for storing your own recipes.
 
 ## App Name
-My Pantry – Your Personal Recipe Organizer
+Private Pantry – Your Personal Recipe Organizer
 
 ## Subtitle
 Create, manage, and favorite your own recipes
 
 ## Description
-My Pantry is a lightweight recipe organizer designed to help you manage your kitchen favorites. Whether you're trying new meals or organizing timeless classics, My Pantry keeps your recipes at your fingertips.
+Private Pantry is a lightweight recipe organizer designed to help you manage your kitchen favorites. Whether you're trying new meals or organizing timeless classics, Private Pantry keeps your recipes at your fingertips.
 
 **Features:**
 - Add custom recipes with ingredients and steps
