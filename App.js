@@ -3,7 +3,7 @@ import Homescreen from "./screens/Homescreen";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import RecipeScreen from "./screens/RecipeScreen";
-import { NewRecipe } from "./components/NewRecipe";
+import { NewRecipe } from "./screens/NewRecipeScreen";
 
 const theme = {
   ...DefaultTheme,

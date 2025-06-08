@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import { Button, List, Text, TextInput } from "react-native-paper";
-import { DynamicForm } from "./DynamicForm";
+import { DynamicForm } from "../components/DynamicForm";
 import { saveRecipe } from "../utils/storage";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRoute } from "@react-navigation/native";
