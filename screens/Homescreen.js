@@ -1,10 +1,21 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { IconButton, List, SegmentedButtons, Text } from "react-native-paper";
 import { MyFAB } from "../components/AnimatedFAB";
-import { clearRecipes, getRecipes, updateRecipe } from "../utils/storage";
+import {
+  clearRecipes,
+  deleteRecipe,
+  getRecipes,
+  updateRecipe,
+} from "../utils/storage";
 import { useCallback } from "react";
 
 const screenHeight = Dimensions.get("window").height;
@@ -103,13 +114,19 @@ export default function Homescreen() {
             title={d.title}
             description={d.description}
             left={(props) => <List.Icon {...props} icon="hamburger" />}
-            right={(props) => (
-              <IconButton
-                {...props}
-                icon={d.favorite ? "star" : "star-outline"}
-                onPress={() => toggleFavorite(d.id)}
-                size={20}
-              />
+            right={() => (
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <IconButton
+                  icon={d.favorite ? "star" : "star-outline"}
+                  onPress={() => toggleFavorite(d.id)}
+                  size={20}
+                />
+                <IconButton
+                  icon="trash-can-outline"
+                  onPress={() => handleDelete(d.id)}
+                  size={20}
+                />
+              </View>
             )}
           />
         ))}

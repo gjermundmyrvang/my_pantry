@@ -22,6 +22,14 @@ export const saveRecipe = async (recipe) => {
   }
 };
 
+export const deleteRecipe = async (id) => {
+  const data = await AsyncStorage.getItem("recipes");
+  const recipes = data ? JSON.parse(data) : [];
+
+  const filtered = recipes.filter((r) => r.id !== id);
+  await AsyncStorage.setItem("recipes", JSON.stringify(filtered));
+};
+
 export const updateRecipe = async (updatedRecipe) => {
   try {
     const existing = await getRecipes();
