@@ -13,7 +13,7 @@ import { Button, List, Text, TextInput } from "react-native-paper";
 import { DynamicForm } from "../components/DynamicForm";
 import { saveRecipe } from "../utils/storage";
 import * as ImagePicker from "expo-image-picker";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export const NewRecipe = () => {
   const [showIngredients, setshowIngredients] = useState(true);
@@ -24,9 +24,7 @@ export const NewRecipe = () => {
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
 
-  const route = useRoute();
   const navigation = useNavigation();
-  const onSave = route.params?.onSave;
 
   const handleOnSave = async () => {
     if (!title.trim()) {
@@ -48,9 +46,6 @@ export const NewRecipe = () => {
     };
 
     await saveRecipe(recipe);
-    if (onSave) {
-      await onSave();
-    }
     navigation.goBack();
   };
 

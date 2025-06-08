@@ -1,10 +1,11 @@
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { Dimensions, SafeAreaView, ScrollView, StyleSheet } from "react-native";
 import { IconButton, List, SegmentedButtons, Text } from "react-native-paper";
 import { MyFAB } from "../components/AnimatedFAB";
 import { clearRecipes, getRecipes, updateRecipe } from "../utils/storage";
+import { useCallback } from "react";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -28,8 +29,14 @@ export default function Homescreen() {
     }
   };
 
-  const handleSave = async () => {
-    console.log("Handle Save Shit");
+  useFocusEffect(
+    useCallback(() => {
+      loadRecipes();
+    }, [])
+  );
+
+  const handleDelete = async (id) => {
+    await deleteRecipe(id);
     await loadRecipes();
   };
 
@@ -61,7 +68,7 @@ export default function Homescreen() {
   };
 
   const handleFABPressed = () => {
-    navigation.navigate("NewRecipe", { onSave: handleSave });
+    navigation.navigate("NewRecipe");
   };
 
   return (
