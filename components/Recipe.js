@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet } from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { Icon, List, Text } from "react-native-paper";
 
 export const Recipe = ({ recipe }) => {
@@ -37,11 +37,17 @@ export const Recipe = ({ recipe }) => {
       <List.Section>
         <List.Subheader style={styles.subheader}>Steps</List.Subheader>
         {recipe.steps.map((d, i) => (
-          <List.Item
-            key={d}
-            title={d}
-            left={() => <Text variant="labelLarge">{i + 1}.</Text>}
-          />
+          <View key={`Step ${i + 1}`} style={styles.row}>
+            <Text
+              variant="labelMedium"
+              style={{ width: 24, textAlign: "right", fontWeight: "800" }}
+            >
+              {i + 1}.
+            </Text>
+            <Text variant="labelMedium" style={{ flex: 1 }}>
+              {d}
+            </Text>
+          </View>
         ))}
       </List.Section>
     </ScrollView>
@@ -57,5 +63,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#6200ee",
     marginVertical: 8,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginVertical: 8,
+    marginHorizontal: 10,
   },
 });

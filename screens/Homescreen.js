@@ -1,17 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  View,
-} from "react-native";
-import Modal from "react-native-modal";
-import { Button, IconButton, List, SegmentedButtons } from "react-native-paper";
+import { Dimensions, SafeAreaView, ScrollView, StyleSheet } from "react-native";
+import { IconButton, List, SegmentedButtons, Text } from "react-native-paper";
 import { MyFAB } from "../components/AnimatedFAB";
-import { NewRecipe } from "../components/NewRecipe";
 import { clearRecipes, getRecipes, updateRecipe } from "../utils/storage";
 
 const screenHeight = Dimensions.get("window").height;
@@ -20,8 +12,6 @@ export default function Homescreen() {
   const [recipes, setRecipes] = useState([]);
   const [filter, setFilter] = useState("all");
   const [isExtended, setIsExtended] = useState(true);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isRecipeVisible, setIsRecipeVisible] = useState(false);
   const navigation = useNavigation();
 
   const filteredRecipes =
@@ -41,7 +31,6 @@ export default function Homescreen() {
   const handleSave = async () => {
     console.log("Handle Save Shit");
     await loadRecipes();
-    toggleModal();
   };
 
   const clearAll = async () => {
@@ -66,17 +55,13 @@ export default function Homescreen() {
     setIsExtended(currentScrollPosition <= 0);
   };
 
-  const toggleModal = () => {
-    setIsModalVisible(!isModalVisible);
-  };
-
-  const toggleRecipe = () => {
-    setIsRecipeVisible(!isRecipeVisible);
-  };
-
   const handleItemPressed = (item) => {
     console.log("Item:", item.title);
     navigation.navigate("Recipe", { recipe: item });
+  };
+
+  const handleFABPressed = () => {
+    navigation.navigate("NewRecipe", { onSave: handleSave });
   };
 
   return (
@@ -121,22 +106,13 @@ export default function Homescreen() {
             )}
           />
         ))}
-        <Button onPress={clearAll}>Remove all recipes</Button>
+        {filteredRecipes.length === 0 && (
+          <Text variant="labelLarge" style={{ marginTop: 20 }}>
+            Pantry is curently empty :(
+          </Text>
+        )}
         <StatusBar style="auto" />
       </ScrollView>
-
-      <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={toggleModal}
-        style={styles.modal}
-        swipeDirection="down"
-        onSwipeComplete={toggleModal}
-        propagateSwipe
-      >
-        <View style={styles.sheetContent}>
-          <NewRecipe handleSave={handleSave} />
-        </View>
-      </Modal>
 
       <MyFAB
         extended={isExtended}
@@ -144,7 +120,7 @@ export default function Homescreen() {
         animateFrom={16}
         visible={true}
         style={{ paddingRight: 10 }}
-        onPress={toggleModal}
+        onPress={handleFABPressed}
       />
     </SafeAreaView>
   );

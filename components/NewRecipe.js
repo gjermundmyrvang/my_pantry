@@ -4,6 +4,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
@@ -12,8 +13,9 @@ import { Button, List, Text, TextInput } from "react-native-paper";
 import { DynamicForm } from "./DynamicForm";
 import { saveRecipe } from "../utils/storage";
 import * as ImagePicker from "expo-image-picker";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-export const NewRecipe = ({ handleSave }) => {
+export const NewRecipe = () => {
   const [showIngredients, setshowIngredients] = useState(true);
   const [showSteps, setshowSteps] = useState(false);
   const [title, setTitle] = useState("");
@@ -21,6 +23,10 @@ export const NewRecipe = ({ handleSave }) => {
   const [image, setImage] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [steps, setSteps] = useState([]);
+
+  const route = useRoute();
+  const navigation = useNavigation();
+  const onSave = route.params?.onSave;
 
   const handleOnSave = async () => {
     if (!title.trim()) {
@@ -42,7 +48,10 @@ export const NewRecipe = ({ handleSave }) => {
     };
 
     await saveRecipe(recipe);
-    handleSave();
+    if (onSave) {
+      await onSave();
+    }
+    navigation.goBack();
   };
 
   const handleAddImage = async () => {
@@ -74,86 +83,91 @@ export const NewRecipe = ({ handleSave }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.flex}
+      style={{ flex: 1 }}
       keyboardVerticalOffset={100}
     >
-      <ScrollView
-        style={styles.container}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled={true}
-      >
-        <View style={styles.headerRow}>
-          <Text variant="titleMedium" style={styles.sectionTitle}>
-            Recipe Info
-          </Text>
-          <Button icon="food" mode="contained" onPress={handleOnSave}>
-            Save Recipe
+      <SafeAreaView>
+        <ScrollView
+          style={styles.container}
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled={true}
+        >
+          <View style={styles.headerRow}>
+            <Text variant="titleMedium" style={styles.sectionTitle}>
+              Recipe Info
+            </Text>
+            <Button icon="food" mode="contained" onPress={handleOnSave}>
+              Save Recipe
+            </Button>
+          </View>
+          <TextInput
+            label="Title"
+            value={title}
+            onChangeText={(text) => setTitle(text)}
+            mode="outlined"
+          />
+          <TextInput
+            label="Short Description"
+            value={description}
+            onChangeText={(text) => setDescription(text)}
+            mode="outlined"
+            style={{ marginTop: 8 }}
+            multiline={true}
+          />
+          <Button
+            icon="image-plus"
+            onPress={handleAddImage}
+            style={styles.addButton}
+          >
+            Add Image
           </Button>
-        </View>
-        <TextInput
-          label="Title"
-          value={title}
-          onChangeText={(text) => setTitle(text)}
-          mode="outlined"
-        />
-        <TextInput
-          label="Short Description"
-          value={description}
-          onChangeText={(text) => setDescription(text)}
-          mode="outlined"
-          style={{ marginTop: 8 }}
-          multiline={true}
-        />
-        <Button
-          icon="image-plus"
-          onPress={handleAddImage}
-          style={styles.addButton}
-        >
-          Add Image
-        </Button>
-        {image && (
-          <Image
-            source={{ uri: image }}
-            style={{
-              width: "100%",
-              height: 200,
-              borderRadius: 8,
-              marginTop: 8,
-            }}
-          />
-        )}
-        <List.Accordion
-          title="Ingredients"
-          left={(props) => <List.Icon {...props} icon="format-list-bulleted" />}
-          expanded={showIngredients}
-          onPress={handleShowIngredients}
-          style={styles.accordion}
-        >
-          <DynamicForm
-            items={ingredients}
-            setItems={setIngredients}
-            label="Ingredient"
-          />
-        </List.Accordion>
-        <List.Accordion
-          title="Steps"
-          left={(props) => <List.Icon {...props} icon="format-list-numbered" />}
-          expanded={showSteps}
-          onPress={handleShowSteps}
-          style={styles.accordion}
-        >
-          <DynamicForm items={steps} setItems={setSteps} label="Step" />
-        </List.Accordion>
-      </ScrollView>
+          {image && (
+            <Image
+              source={{ uri: image }}
+              style={{
+                width: "100%",
+                height: 200,
+                borderRadius: 8,
+                marginTop: 8,
+                marginBottom: 8,
+              }}
+            />
+          )}
+          <List.Accordion
+            title="Ingredients"
+            left={(props) => (
+              <List.Icon {...props} icon="format-list-bulleted" />
+            )}
+            expanded={showIngredients}
+            onPress={handleShowIngredients}
+            style={styles.accordion}
+          >
+            <DynamicForm
+              items={ingredients}
+              setItems={setIngredients}
+              label="Ingredient"
+            />
+          </List.Accordion>
+          <List.Accordion
+            title="Steps"
+            left={(props) => (
+              <List.Icon {...props} icon="format-list-numbered" />
+            )}
+            expanded={showSteps}
+            onPress={handleShowSteps}
+            style={styles.accordion}
+          >
+            <DynamicForm items={steps} setItems={setSteps} label="Step" />
+          </List.Accordion>
+        </ScrollView>
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  flex: {
-    flex: 1,
-  },
   container: {
+    padding: 8,
     paddingBottom: 100,
   },
   headerRow: {
@@ -168,13 +182,7 @@ const styles = StyleSheet.create({
   addButton: {
     marginTop: 8,
   },
-  section: {
-    marginVertical: 8,
-    backgroundColor: "black",
-  },
   accordion: {
-    borderRadius: 8,
     paddingHorizontal: 4,
-    marginTop: 8,
   },
 });

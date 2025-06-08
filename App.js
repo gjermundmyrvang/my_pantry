@@ -3,6 +3,7 @@ import Homescreen from "./screens/Homescreen";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import RecipeScreen from "./screens/RecipeScreen";
+import { NewRecipe } from "./components/NewRecipe";
 
 const theme = {
   ...DefaultTheme,
@@ -25,6 +26,7 @@ export default function App() {
         >
           <Stack.Screen name="Home" component={Homescreen} />
           <Stack.Screen name="Recipe" component={RecipeScreen} />
+          <Stack.Screen name="NewRecipe" component={NewRecipe} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
