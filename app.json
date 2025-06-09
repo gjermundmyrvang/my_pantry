@@ -14,7 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "gjermundmyrvang.mypantry"
+      "bundleIdentifier": "gjermundmyrvang.mypantry",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to select images for recipes.",
+        "NSCameraUsageDescription": "This app needs access to your camera to take photos for recipes."
+      }
     },
     "android": {
       "adaptiveIcon": {
