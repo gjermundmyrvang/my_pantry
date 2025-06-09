@@ -8,7 +8,13 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import { IconButton, List, SegmentedButtons, Text } from "react-native-paper";
+import {
+  IconButton,
+  List,
+  MD3Colors,
+  SegmentedButtons,
+  Text,
+} from "react-native-paper";
 import { MyFAB } from "../components/AnimatedFAB";
 import {
   clearRecipes,
@@ -112,8 +118,16 @@ export default function Homescreen() {
             key={d.id}
             onPress={() => handleItemPressed(d)}
             title={d.title}
+            titleStyle={{ fontWeight: "600" }}
             description={d.description}
-            left={(props) => <List.Icon {...props} icon="hamburger" />}
+            left={(props) => (
+              <List.Icon
+                {...props}
+                icon="food"
+                color={MD3Colors.primary50}
+                size={30}
+              />
+            )}
             right={() => (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <IconButton
@@ -132,7 +146,7 @@ export default function Homescreen() {
         ))}
         {filteredRecipes.length === 0 && (
           <Text variant="labelLarge" style={{ marginTop: 20 }}>
-            Pantry is curently empty :(
+            Storage is curently empty :(
           </Text>
         )}
         <StatusBar style="auto" />
