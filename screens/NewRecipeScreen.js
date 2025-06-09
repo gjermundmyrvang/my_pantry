@@ -107,6 +107,7 @@ export const NewRecipe = () => {
             value={title}
             onChangeText={(text) => setTitle(text)}
             mode="outlined"
+            outlineColor="#ececec"
           />
           <TextInput
             label="Short Description"
@@ -115,6 +116,7 @@ export const NewRecipe = () => {
             mode="outlined"
             style={{ marginTop: 8 }}
             multiline={true}
+            outlineColor="#ececec"
           />
           <Button
             icon="image-plus"
@@ -142,6 +144,8 @@ export const NewRecipe = () => {
             )}
             expanded={showIngredients}
             onPress={handleShowIngredients}
+            containerStyle={{ backgroundColor: "#ececec" }}
+            style={{ backgroundColor: "#ececec" }}
           >
             <DynamicForm
               items={ingredients}
@@ -157,6 +161,8 @@ export const NewRecipe = () => {
             )}
             expanded={showSteps}
             onPress={handleShowSteps}
+            containerStyle={{ backgroundColor: "#ececec" }}
+            style={{ backgroundColor: "#ececec" }}
           >
             <DynamicForm
               items={steps}
