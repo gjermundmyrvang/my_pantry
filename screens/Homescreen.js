@@ -83,7 +83,7 @@ export default function Homescreen() {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: "#ececec" }}>
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}

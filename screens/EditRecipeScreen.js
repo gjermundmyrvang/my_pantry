@@ -1,3 +1,4 @@
+import * as ImagePicker from "expo-image-picker";
 import { useRef, useState } from "react";
 import {
   Alert,
@@ -11,18 +12,18 @@ import {
 } from "react-native";
 import { Button, List, Text, TextInput } from "react-native-paper";
 import { DynamicForm } from "../components/DynamicForm";
-import { saveRecipe } from "../utils/storage";
-import * as ImagePicker from "expo-image-picker";
-import { useNavigation } from "@react-navigation/native";
+import { updateRecipe } from "../utils/storage";
 
-export const NewRecipe = () => {
-  const [showIngredients, setshowIngredients] = useState(true);
+export const EditRecipe = ({ route, navigation }) => {
+  const { recipe, onUpdate } = route.params;
+
+  const [showIngredients, setshowIngredients] = useState(false);
   const [showSteps, setshowSteps] = useState(false);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
-  const [ingredients, setIngredients] = useState([]);
-  const [steps, setSteps] = useState([]);
+  const [title, setTitle] = useState(recipe.title);
+  const [description, setDescription] = useState(recipe.description);
+  const [image, setImage] = useState(recipe.image);
+  const [ingredients, setIngredients] = useState(recipe.ingredients);
+  const [steps, setSteps] = useState(recipe.steps);
 
   const scrollRef = useRef();
 
@@ -30,9 +31,7 @@ export const NewRecipe = () => {
     scrollRef.current?.scrollToEnd({ animated: true });
   };
 
-  const navigation = useNavigation();
-
-  const handleOnSave = async () => {
+  const handleUpdate = async () => {
     if (!title.trim()) {
       Alert.alert("Missing Title", "Please enter a title for your recipe.");
       return;
@@ -41,17 +40,17 @@ export const NewRecipe = () => {
       Alert.alert("A dish needs ingredients and steps to make it M8!");
       return;
     }
-    const recipe = {
-      id: Date.now(),
+    const updatedRecipe = {
+      ...recipe,
       title,
       description,
+      image,
       ingredients,
       steps,
-      favorite: false,
-      image,
     };
 
-    await saveRecipe(recipe);
+    await updateRecipe(updatedRecipe);
+    if (onUpdate) onUpdate(updatedRecipe);
     navigation.goBack();
   };
 
@@ -78,6 +77,7 @@ export const NewRecipe = () => {
       setImage(result.assets[0].uri);
     }
   };
+
   const handleShowIngredients = () => setshowIngredients(!showIngredients);
   const handleShowSteps = () => setshowSteps(!showSteps);
 
@@ -98,7 +98,7 @@ export const NewRecipe = () => {
             <Text variant="titleMedium" style={styles.sectionTitle}>
               Recipe Info
             </Text>
-            <Button icon="food" mode="contained" onPress={handleOnSave}>
+            <Button icon="food" mode="contained" onPress={handleUpdate}>
               Save Recipe
             </Button>
           </View>
