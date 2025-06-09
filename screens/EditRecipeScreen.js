@@ -99,7 +99,7 @@ export const EditRecipe = ({ route, navigation }) => {
               Recipe Info
             </Text>
             <Button icon="food" mode="contained" onPress={handleUpdate}>
-              Save Recipe
+              Update Recipe
             </Button>
           </View>
           <TextInput
@@ -107,6 +107,7 @@ export const EditRecipe = ({ route, navigation }) => {
             value={title}
             onChangeText={(text) => setTitle(text)}
             mode="outlined"
+            outlineColor="#ececec"
           />
           <TextInput
             label="Short Description"
@@ -115,6 +116,7 @@ export const EditRecipe = ({ route, navigation }) => {
             mode="outlined"
             style={{ marginTop: 8 }}
             multiline={true}
+            outlineColor="#ececec"
           />
           <Button
             icon="image-plus"
@@ -142,6 +144,8 @@ export const EditRecipe = ({ route, navigation }) => {
             )}
             expanded={showIngredients}
             onPress={handleShowIngredients}
+            containerStyle={{ backgroundColor: "#ececec" }}
+            style={{ backgroundColor: "#ececec" }}
           >
             <DynamicForm
               items={ingredients}
@@ -157,6 +161,8 @@ export const EditRecipe = ({ route, navigation }) => {
             )}
             expanded={showSteps}
             onPress={handleShowSteps}
+            containerStyle={{ backgroundColor: "#ececec" }}
+            style={{ backgroundColor: "#ececec" }}
           >
             <DynamicForm
               items={steps}
