@@ -1,14 +1,27 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Divider, IconButton, Text, TextInput } from "react-native-paper";
+import { IconButton, Text, TextInput } from "react-native-paper";
 
-export const DynamicForm = ({ items, setItems, label = "Item" }) => {
+export const DynamicForm = ({
+  items,
+  setItems,
+  label = "Item",
+  scrollToBottom,
+}) => {
   const [currentInput, setCurrentInput] = useState("");
+  const inputRef = useRef(null);
 
   const handleAdd = () => {
     if (currentInput.trim() === "") return;
+
     setItems([...items, currentInput.trim()]);
     setCurrentInput("");
+
+    scrollToBottom?.();
+
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
   };
 
   const removeItem = (index) => {
@@ -30,15 +43,16 @@ export const DynamicForm = ({ items, setItems, label = "Item" }) => {
           />
         </View>
       ))}
-      {items.length > 0 && <Divider style={{ marginVertical: 8 }} />}
 
       <View style={styles.inputRow}>
         <TextInput
+          ref={inputRef}
           value={currentInput}
           onChangeText={setCurrentInput}
           placeholder={`Enter ${label}`}
           mode="outlined"
           returnKeyType="done"
+          outlineColor="#ececec"
           onSubmitEditing={handleAdd}
           style={styles.input}
           right={

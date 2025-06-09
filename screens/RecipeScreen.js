@@ -1,29 +1,38 @@
-import { SafeAreaView, StyleSheet, View } from "react-native";
-import { IconButton, Text } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import { Appbar } from "react-native-paper";
 import { Recipe } from "../components/Recipe";
+import { useState } from "react";
 
 export default function RecipeScreen({ route, navigation }) {
-  const { recipe } = route.params;
+  const [recipe, setRecipe] = useState(route.params.recipe);
+
+  const handleEdit = () => {
+    navigation.navigate("EditRecipe", {
+      recipe,
+      onUpdate: (updated) => setRecipe(updated),
+    });
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.headerRow}>
-        <IconButton
-          icon="arrow-left"
-          size={24}
-          onPress={() => navigation.goBack()}
-        />
-        <Text variant="headlineLarge">{recipe.title}</Text>
-      </View>
+    <View style={styles.container}>
+      <Appbar.Header
+        mode="small"
+        elevated={true}
+        style={{ backgroundColor: "#ececec" }}
+      >
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.Content title={recipe.title} />
+        <Appbar.Action icon="pencil" onPress={handleEdit} />
+      </Appbar.Header>
       <Recipe recipe={recipe} />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
+    backgroundColor: "#ececec",
   },
   headerRow: {
     flexDirection: "row",

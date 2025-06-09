@@ -19,7 +19,10 @@ export const Recipe = ({ recipe }) => {
           }}
         />
       ) : (
-        <Icon source="image-off-outline" size={40} />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Icon source="image-off-outline" size={40} />
+          <Text variant="labelMedium">Edit recipe to add an image</Text>
+        </View>
       )}
       <Text variant="labelMedium" style={{ marginTop: 10 }}>
         {recipe.description}

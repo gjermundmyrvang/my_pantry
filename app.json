@@ -2,7 +2,7 @@
   "expo": {
     "name": "my_pantry_application",
     "slug": "my_pantry_application",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/pantryIcon.png",
     "userInterfaceStyle": "light",
@@ -14,7 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "gjermundmyrvang.mypantry"
+      "bundleIdentifier": "gjermundmyrvang.mypantry",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to select images for recipes.",
+        "NSCameraUsageDescription": "This app needs access to your camera to take photos for recipes."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +32,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "8c12ec9b-166a-407f-88b1-8aa7b5272cfc"
+        "projectId": "3123f84a-0ffc-4129-a44c-181e5da86661"
       }
     }
   }
