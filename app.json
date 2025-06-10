@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "my_pantry_application",
-    "slug": "my_pantry_application",
-    "version": "1.0.1",
+    "name": "Private Pantry",
+    "slug": "privatepantry",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/pantryIcon.png",
     "userInterfaceStyle": "light",

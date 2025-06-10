@@ -99,7 +99,7 @@ export const EditRecipe = ({ route, navigation }) => {
               Recipe Info
             </Text>
             <Button icon="food" mode="contained" onPress={handleUpdate}>
-              Update Recipe
+              Update Recipej
             </Button>
           </View>
           <TextInput
