@@ -2,7 +2,7 @@
   "expo": {
     "name": "Private Pantry",
     "slug": "privatepantry",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/pantryIcon.png",
     "userInterfaceStyle": "automatic",
