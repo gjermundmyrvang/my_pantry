@@ -20,7 +20,7 @@ import { RootStackParamList } from "../types/navigation";
 type Props = NativeStackScreenProps<RootStackParamList, "EditRecipe">;
 
 export const EditRecipe = ({ route, navigation }: Props) => {
-  const { recipe, onUpdate } = route.params;
+  const { recipe } = route.params;
 
   const [showIngredients, setShowIngredients] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
@@ -36,28 +36,6 @@ export const EditRecipe = ({ route, navigation }: Props) => {
     scrollRef.current?.scrollToEnd({ animated: true });
   };
 
-  const handleUpdate = async () => {
-    if (!title.trim()) {
-      Alert.alert("Missing Title", "Please enter a title for your recipe.");
-      return;
-    }
-    if (ingredients.length === 0 || steps.length === 0) {
-      Alert.alert("A dish needs ingredients and steps to make it M8!");
-      return;
-    }
-    const updatedRecipe: RecipeType = {
-      ...recipe,
-      title,
-      description,
-      image,
-      ingredients,
-      steps,
-    };
-
-    await updateRecipe(updatedRecipe);
-    if (onUpdate) onUpdate(updatedRecipe);
-    navigation.goBack();
-  };
 
   const handleAddImage = async () => {
     const permissionResult =
@@ -76,6 +54,11 @@ export const EditRecipe = ({ route, navigation }: Props) => {
       quality: 0.7,
       allowsEditing: true,
       aspect: [4, 3],
+  const handleUpdate = async (updated: RecipeType) => {
+    await updateRecipe(updated);
+    navigation.pop();
+    navigation.replace("Recipe", {
+      recipe: updated,
     });
 
     if (!result.canceled && result.assets && result.assets.length > 0) {

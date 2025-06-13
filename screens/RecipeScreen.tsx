@@ -9,12 +9,11 @@ import { RecipeType } from "../types/Recipe";
 type Props = NativeStackScreenProps<RootStackParamList, "Recipe">;
 
 export default function RecipeScreen({ route, navigation }: Props) {
-  const [recipe, setRecipe] = useState<RecipeType>(route.params.recipe);
+  const { recipe } = route.params;
 
   const handleEdit = () => {
     navigation.navigate("EditRecipe", {
       recipe,
-      onUpdate: (updated: RecipeType) => setRecipe(updated),
     });
   };
 
