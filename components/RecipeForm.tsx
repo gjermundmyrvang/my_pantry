@@ -103,6 +103,7 @@ export const RecipeForm: React.FC<RecipeFormProps> = ({
           style={styles.container}
           showsVerticalScrollIndicator={false}
           ref={scrollRef}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.headerRow}>
             <Text variant="titleMedium">Recipe Info</Text>
