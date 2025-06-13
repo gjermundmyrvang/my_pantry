@@ -1,25 +1,22 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Homescreen from "./screens/Homescreen";
-import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
-import RecipeScreen from "./screens/RecipeScreen";
-import { NewRecipe } from "./screens/NewRecipeScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Provider as PaperProvider } from "react-native-paper";
 import { EditRecipe } from "./screens/EditRecipeScreen";
+import Homescreen from "./screens/Homescreen";
+import { NewRecipe } from "./screens/NewRecipeScreen";
+import RecipeScreen from "./screens/RecipeScreen";
 import { RootStackParamList } from "./types/navigation";
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: "#6200ee",
-  },
-};
+import { useColorScheme } from "react-native";
+import { darkTheme, lightTheme } from "./theme";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  const colorScheme = useColorScheme();
+  const paperTheme = colorScheme === "dark" ? darkTheme : lightTheme;
+
   return (
-    <PaperProvider theme={theme}>
+    <PaperProvider theme={paperTheme}>
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Home"
