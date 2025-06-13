@@ -1,5 +1,5 @@
 import * as ImagePicker from "expo-image-picker";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Alert,
   Image,
@@ -13,19 +13,24 @@ import {
 import { Button, List, Text, TextInput } from "react-native-paper";
 import { DynamicForm } from "../components/DynamicForm";
 import { updateRecipe } from "../utils/storage";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RecipeType } from "../types/Recipe";
+import { RootStackParamList } from "../types/navigation";
 
-export const EditRecipe = ({ route, navigation }) => {
+type Props = NativeStackScreenProps<RootStackParamList, "EditRecipe">;
+
+export const EditRecipe = ({ route, navigation }: Props) => {
   const { recipe, onUpdate } = route.params;
 
-  const [showIngredients, setshowIngredients] = useState(false);
-  const [showSteps, setshowSteps] = useState(false);
+  const [showIngredients, setShowIngredients] = useState(false);
+  const [showSteps, setShowSteps] = useState(false);
   const [title, setTitle] = useState(recipe.title);
   const [description, setDescription] = useState(recipe.description);
-  const [image, setImage] = useState(recipe.image);
-  const [ingredients, setIngredients] = useState(recipe.ingredients);
-  const [steps, setSteps] = useState(recipe.steps);
+  const [image, setImage] = useState<string | undefined>(recipe.image);
+  const [ingredients, setIngredients] = useState<string[]>(recipe.ingredients);
+  const [steps, setSteps] = useState<string[]>(recipe.steps);
 
-  const scrollRef = useRef();
+  const scrollRef = useRef<ScrollView | null>(null);
 
   const scrollToBottom = () => {
     scrollRef.current?.scrollToEnd({ animated: true });
@@ -40,7 +45,7 @@ export const EditRecipe = ({ route, navigation }) => {
       Alert.alert("A dish needs ingredients and steps to make it M8!");
       return;
     }
-    const updatedRecipe = {
+    const updatedRecipe: RecipeType = {
       ...recipe,
       title,
       description,
@@ -67,19 +72,19 @@ export const EditRecipe = ({ route, navigation }) => {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.Images,
+      mediaTypes: ["images"],
       quality: 0.7,
       allowsEditing: true,
       aspect: [4, 3],
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
   };
 
-  const handleShowIngredients = () => setshowIngredients(!showIngredients);
-  const handleShowSteps = () => setshowSteps(!showSteps);
+  const handleShowIngredients = () => setShowIngredients((prev) => !prev);
+  const handleShowSteps = () => setShowSteps((prev) => !prev);
 
   return (
     <KeyboardAvoidingView
@@ -105,14 +110,14 @@ export const EditRecipe = ({ route, navigation }) => {
           <TextInput
             label="Title"
             value={title}
-            onChangeText={(text) => setTitle(text)}
+            onChangeText={setTitle}
             mode="outlined"
             outlineColor="#ececec"
           />
           <TextInput
             label="Short Description"
             value={description}
-            onChangeText={(text) => setDescription(text)}
+            onChangeText={setDescription}
             mode="outlined"
             style={{ marginTop: 8 }}
             multiline={true}

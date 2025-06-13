@@ -1,12 +1,14 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Dimensions,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   View,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
 } from "react-native";
 import {
   IconButton,
@@ -22,15 +24,18 @@ import {
   getRecipes,
   updateRecipe,
 } from "../utils/storage";
-import { useCallback } from "react";
+import { RecipeType } from "../types/Recipe";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types/navigation";
 
 const screenHeight = Dimensions.get("window").height;
 
 export default function Homescreen() {
-  const [recipes, setRecipes] = useState([]);
-  const [filter, setFilter] = useState("all");
+  const [recipes, setRecipes] = useState<RecipeType[]>([]);
+  const [filter, setFilter] = useState<"all" | "fav">("all");
   const [isExtended, setIsExtended] = useState(true);
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList, "Home">>();
 
   const filteredRecipes =
     filter === "fav" ? recipes.filter((r) => r.favorite) : recipes;
@@ -52,7 +57,7 @@ export default function Homescreen() {
     }, [])
   );
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     await deleteRecipe(id);
     await loadRecipes();
   };
@@ -62,25 +67,25 @@ export default function Homescreen() {
     await loadRecipes();
   };
 
-  const toggleFavorite = async (id) => {
+  const toggleFavorite = async (id: string) => {
     const updatedRecipes = recipes.map((r) =>
       r.id === id ? { ...r, favorite: !r.favorite } : r
     );
     setRecipes(updatedRecipes);
 
     const toggled = updatedRecipes.find((r) => r.id === id);
-    await updateRecipe(toggled);
+    if (toggled) {
+      await updateRecipe(toggled);
+    }
   };
 
-  const onScroll = ({ nativeEvent }) => {
+  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const currentScrollPosition =
-      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-
+      Math.floor(event.nativeEvent?.contentOffset?.y) ?? 0;
     setIsExtended(currentScrollPosition <= 0);
   };
 
-  const handleItemPressed = (item) => {
-    console.log("Item:", item.title);
+  const handleItemPressed = (item: RecipeType) => {
     navigation.navigate("Recipe", { recipe: item });
   };
 
@@ -95,10 +100,11 @@ export default function Homescreen() {
         showsVerticalScrollIndicator={false}
         onScroll={onScroll}
         stickyHeaderIndices={[0]}
+        scrollEventThrottle={16}
       >
         <SegmentedButtons
           value={filter}
-          onValueChange={setFilter}
+          onValueChange={(val) => setFilter(val)}
           style={{ backgroundColor: "#ececec" }}
           buttons={[
             {
@@ -121,12 +127,7 @@ export default function Homescreen() {
             titleStyle={{ fontWeight: "600" }}
             description={d.description}
             left={(props) => (
-              <List.Icon
-                {...props}
-                icon="food"
-                color={MD3Colors.primary50}
-                size={30}
-              />
+              <List.Icon {...props} icon="food" color={MD3Colors.primary50} />
             )}
             right={() => (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -146,7 +147,7 @@ export default function Homescreen() {
         ))}
         {filteredRecipes.length === 0 && (
           <Text variant="labelLarge" style={{ marginTop: 20 }}>
-            Storage is curently empty :(
+            Storage is currently empty :(
           </Text>
         )}
         <StatusBar style="auto" />
@@ -155,7 +156,7 @@ export default function Homescreen() {
       <MyFAB
         extended={isExtended}
         label={"New Recipe"}
-        animateFrom={16}
+        animateFrom={"right"}
         visible={true}
         style={{ paddingRight: 10 }}
         onPress={handleFABPressed}

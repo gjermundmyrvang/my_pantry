@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import RecipeScreen from "./screens/RecipeScreen";
 import { NewRecipe } from "./screens/NewRecipeScreen";
 import { EditRecipe } from "./screens/EditRecipeScreen";
+import { RootStackParamList } from "./types/navigation";
 
 const theme = {
   ...DefaultTheme,
@@ -14,7 +15,7 @@ const theme = {
   },
 };
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (

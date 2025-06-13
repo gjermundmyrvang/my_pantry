@@ -2,14 +2,19 @@ import { StyleSheet, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import { Recipe } from "../components/Recipe";
 import { useState } from "react";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../types/navigation";
+import { RecipeType } from "../types/Recipe";
 
-export default function RecipeScreen({ route, navigation }) {
-  const [recipe, setRecipe] = useState(route.params.recipe);
+type Props = NativeStackScreenProps<RootStackParamList, "Recipe">;
+
+export default function RecipeScreen({ route, navigation }: Props) {
+  const [recipe, setRecipe] = useState<RecipeType>(route.params.recipe);
 
   const handleEdit = () => {
     navigation.navigate("EditRecipe", {
       recipe,
-      onUpdate: (updated) => setRecipe(updated),
+      onUpdate: (updated: RecipeType) => setRecipe(updated),
     });
   };
 

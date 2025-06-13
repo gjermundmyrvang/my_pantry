@@ -14,17 +14,18 @@ import { DynamicForm } from "../components/DynamicForm";
 import { saveRecipe } from "../utils/storage";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
+import { RecipeType } from "../types/Recipe";
 
 export const NewRecipe = () => {
   const [showIngredients, setshowIngredients] = useState(true);
   const [showSteps, setshowSteps] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState(null);
-  const [ingredients, setIngredients] = useState([]);
-  const [steps, setSteps] = useState([]);
+  const [image, setImage] = useState<string | undefined>(undefined);
+  const [ingredients, setIngredients] = useState<string[]>([]);
+  const [steps, setSteps] = useState<string[]>([]);
 
-  const scrollRef = useRef();
+  const scrollRef = useRef<ScrollView | null>(null);
 
   const scrollToBottom = () => {
     scrollRef.current?.scrollToEnd({ animated: true });
@@ -41,14 +42,14 @@ export const NewRecipe = () => {
       Alert.alert("A dish needs ingredients and steps to make it M8!");
       return;
     }
-    const recipe = {
-      id: Date.now(),
+    const recipe: RecipeType = {
+      id: Date.now().toLocaleString(),
       title,
       description,
       ingredients,
       steps,
       favorite: false,
-      image,
+      image: image ?? undefined,
     };
 
     await saveRecipe(recipe);
@@ -68,16 +69,17 @@ export const NewRecipe = () => {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.Images,
+      mediaTypes: ["images"],
       quality: 0.7,
       allowsEditing: true,
       aspect: [4, 3],
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets && result.assets.length > 0) {
       setImage(result.assets[0].uri);
     }
   };
+
   const handleShowIngredients = () => setshowIngredients(!showIngredients);
   const handleShowSteps = () => setshowSteps(!showSteps);
 
