@@ -18,7 +18,9 @@ export const darkTheme = {
   colors: {
     ...DarkThemeBase.colors,
     primary: "#6200EE", // Purple
-    secondary: "#EBDDFF", // Light pink
-    background: "#25144A", // Dark Purple
+    secondary: "#3F237C", // Light pink
+    background: "#1C0F38", // Dark Purple
+    secondaryContainer: "#A98AD6",
+    outline: "#A98AD6",
   },
 };
