@@ -1,15 +1,15 @@
-import { StyleSheet, View } from "react-native";
-import { Appbar } from "react-native-paper";
-import { Recipe } from "../components/Recipe";
-import { useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { View } from "react-native";
+import { Appbar, useTheme } from "react-native-paper";
+import { Recipe } from "../components/Recipe";
 import { RootStackParamList } from "../types/navigation";
-import { RecipeType } from "../types/Recipe";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Recipe">;
 
 export default function RecipeScreen({ route, navigation }: Props) {
   const { recipe } = route.params;
+
+  const { colors } = useTheme();
 
   const handleEdit = () => {
     navigation.navigate("EditRecipe", {
@@ -18,11 +18,11 @@ export default function RecipeScreen({ route, navigation }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <Appbar.Header
         mode="small"
         elevated={true}
-        style={{ backgroundColor: "#ececec" }}
+        style={{ backgroundColor: colors.background }}
       >
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title={recipe.title} />
@@ -32,14 +32,3 @@ export default function RecipeScreen({ route, navigation }: Props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ececec",
-  },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});
