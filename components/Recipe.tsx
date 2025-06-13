@@ -1,12 +1,17 @@
 import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { Icon, List, Text } from "react-native-paper";
+import { Icon, List, Text, useTheme } from "react-native-paper";
+import { RecipeType } from "../types/Recipe";
 
-export const Recipe = ({ recipe }) => {
+type RecipeProps = {
+  recipe: RecipeType;
+};
+
+export const Recipe = ({ recipe }: RecipeProps) => {
+  const { colors } = useTheme();
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
       style={styles.scrollTainer}
-      nestedScrollEnabled={true}
     >
       {recipe.image ? (
         <Image
@@ -28,7 +33,11 @@ export const Recipe = ({ recipe }) => {
         {recipe.description}
       </Text>
       <List.Section>
-        <List.Subheader style={styles.subheader}>Ingredients</List.Subheader>
+        <List.Subheader
+          style={{ color: colors.primary, fontSize: 18, fontWeight: "bold" }}
+        >
+          Ingredients
+        </List.Subheader>
         {recipe.ingredients.map((d) => (
           <List.Item
             key={d}
@@ -37,20 +46,19 @@ export const Recipe = ({ recipe }) => {
           />
         ))}
       </List.Section>
-      <List.Section>
-        <List.Subheader style={styles.subheader}>Steps</List.Subheader>
+      <List.Section style={{ paddingBottom: 50 }}>
+        <List.Subheader
+          style={{ color: colors.primary, fontSize: 18, fontWeight: "bold" }}
+        >
+          Steps
+        </List.Subheader>
         {recipe.steps.map((d, i) => (
-          <View key={`Step ${i + 1}`} style={styles.row}>
-            <Text
-              variant="labelMedium"
-              style={{ width: 24, textAlign: "right", fontWeight: "800" }}
-            >
-              {i + 1}.
-            </Text>
-            <Text variant="labelMedium" style={{ flex: 1 }}>
-              {d}
-            </Text>
-          </View>
+          <List.Item
+            key={`Step: ${i + 1}`}
+            title={d}
+            titleNumberOfLines={4}
+            left={() => <Text variant="titleMedium">{i + 1}.</Text>}
+          />
         ))}
       </List.Section>
     </ScrollView>
@@ -60,12 +68,6 @@ export const Recipe = ({ recipe }) => {
 const styles = StyleSheet.create({
   scrollTainer: {
     padding: 16,
-  },
-  subheader: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#6200ee",
-    marginVertical: 8,
   },
   row: {
     flexDirection: "row",

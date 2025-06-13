@@ -1,15 +1,29 @@
 import { useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { IconButton, Text, TextInput } from "react-native-paper";
+import {
+  IconButton,
+  List,
+  Text,
+  TextInput,
+  useTheme,
+} from "react-native-paper";
+
+type DynamicFormProps = {
+  items: string[];
+  setItems: (items: string[]) => void;
+  label?: string;
+  scrollToBottom?: () => void;
+};
 
 export const DynamicForm = ({
   items,
   setItems,
   label = "Item",
   scrollToBottom,
-}) => {
+}: DynamicFormProps) => {
   const [currentInput, setCurrentInput] = useState("");
-  const inputRef = useRef(null);
+  const { colors } = useTheme();
+  const inputRef = useRef<any>(null);
 
   const handleAdd = () => {
     if (currentInput.trim() === "") return;
@@ -20,11 +34,11 @@ export const DynamicForm = ({
     scrollToBottom?.();
 
     setTimeout(() => {
-      inputRef.current?.focus();
+      inputRef.current?.focus?.();
     }, 100);
   };
 
-  const removeItem = (index) => {
+  const removeItem = (index: number) => {
     const updated = [...items];
     updated.splice(index, 1);
     setItems(updated);
@@ -33,17 +47,18 @@ export const DynamicForm = ({
   return (
     <View style={styles.wrapper}>
       {items.map((item, index) => (
-        <View key={`${index}-${item}`} style={styles.itemRow}>
-          <Text style={styles.itemText}>{item}</Text>
-          <IconButton
-            icon="delete"
-            onPress={() => removeItem(index)}
-            size={20}
-            style={styles.deleteButton}
-          />
-        </View>
+        <List.Item
+          key={`${index}-${item}`}
+          title={item}
+          right={() => (
+            <IconButton
+              icon="delete"
+              onPress={() => removeItem(index)}
+              size={20}
+            />
+          )}
+        />
       ))}
-
       <View style={styles.inputRow}>
         <TextInput
           ref={inputRef}
@@ -52,7 +67,7 @@ export const DynamicForm = ({
           placeholder={`Enter ${label}`}
           mode="outlined"
           returnKeyType="done"
-          outlineColor="#ececec"
+          outlineColor={colors.secondary}
           onSubmitEditing={handleAdd}
           style={styles.input}
           right={
@@ -84,12 +99,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
   },
-  deleteButton: {
-    marginLeft: 4,
-  },
-  addButton: {
-    marginTop: 8,
-  },
   itemRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -97,15 +106,18 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     gap: 4,
   },
-
   itemText: {
     flex: 1,
     flexWrap: "wrap",
   },
-
   iconButton: {
     alignSelf: "center",
     padding: 0,
     margin: 0,
+  },
+  inputRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 8,
   },
 });
