@@ -16,6 +16,7 @@ import {
   MD3Colors,
   SegmentedButtons,
   Text,
+  useTheme,
 } from "react-native-paper";
 import { MyFAB } from "../components/AnimatedFAB";
 import {
@@ -34,6 +35,7 @@ export default function Homescreen() {
   const [recipes, setRecipes] = useState<RecipeType[]>([]);
   const [filter, setFilter] = useState<"all" | "fav">("all");
   const [isExtended, setIsExtended] = useState(true);
+  const { colors } = useTheme();
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList, "Home">>();
 
@@ -94,7 +96,7 @@ export default function Homescreen() {
   };
 
   return (
-    <SafeAreaView style={{ backgroundColor: "#ececec" }}>
+    <SafeAreaView style={{ backgroundColor: colors.background }}>
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
@@ -105,17 +107,18 @@ export default function Homescreen() {
         <SegmentedButtons
           value={filter}
           onValueChange={(val) => setFilter(val)}
-          style={{ backgroundColor: "#ececec" }}
           buttons={[
             {
               value: "all",
               label: "All Recipes",
               icon: "folder-outline",
+              checkedColor: colors.primary,
             },
             {
               value: "fav",
               label: "Favorite Recipes",
               icon: "folder-star-outline",
+              checkedColor: colors.primary,
             },
           ]}
         />
@@ -127,7 +130,7 @@ export default function Homescreen() {
             titleStyle={{ fontWeight: "600" }}
             description={d.description}
             left={(props) => (
-              <List.Icon {...props} icon="food" color={MD3Colors.primary50} />
+              <List.Icon {...props} icon="food" color={colors.primary} />
             )}
             right={() => (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -156,9 +159,7 @@ export default function Homescreen() {
       <MyFAB
         extended={isExtended}
         label={"New Recipe"}
-        animateFrom={"right"}
         visible={true}
-        style={{ paddingRight: 10 }}
         onPress={handleFABPressed}
       />
     </SafeAreaView>
@@ -169,16 +170,5 @@ const styles = StyleSheet.create({
   container: {
     padding: 8,
     minHeight: "100%",
-  },
-  modal: {
-    justifyContent: "flex-end",
-    margin: 0,
-  },
-  sheetContent: {
-    height: screenHeight * 0.9,
-    backgroundColor: "white",
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    padding: 16,
   },
 });
